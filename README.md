@@ -1,22 +1,35 @@
-# MCP Voice Assistant Setup Guide
+# MCP Realtime Voice
 
-This guide will help you set up and run the MCP Voice Assistant that enables voice interaction with Claude.
+Turn Claude into a voice assistant that listens and speaks. This MCP server handles speech recognition and text-to-speech for a natural voice interface.
+
+> **⚠️ IMPORTANT:** 
+> - This has only been tested on macOS.
+> - Launch Claude from the terminal with the command below instead of clicking the app icon. This fixes microphone permission issues.
+
+## Features
+
+- Speech recognition with silence detection
+- Text-to-speech for AI responses
+- Voice Activity Detection using Silero
+- Works on Windows, macOS, and Linux
+- Audio device management
+- Simple voice conversation interface
 
 ## Prerequisites
 
-- Python 3.8 or higher
-- pip (Python package installer)
-- A microphone and speakers for audio input/output
+- Python 3.8+
+- A microphone and speakers
+- MCP client (Claude)
 
 ## Installation
 
-1. Create a new directory for your project and navigate to it:
+1. Clone this repo:
    ```bash
-   mkdir mcp-voice-assistant
-   cd mcp-voice-assistant
+   git clone https://github.com/yourusername/mcp-realtime-voice.git
+   cd mcp-realtime-voice
    ```
 
-2. (Optional) Create a virtual environment:
+2. Set up a virtual environment:
    ```bash
    python -m venv venv
    
@@ -27,57 +40,69 @@ This guide will help you set up and run the MCP Voice Assistant that enables voi
    source venv/bin/activate
    ```
 
-3. Install the required packages:
+3. Install dependencies:
    ```bash
-   pip install mcp sounddevice numpy SpeechRecognition gtts playsound
+   pip install -r requirements.txt
    ```
 
-   Note: Some additional dependencies may be required depending on your system:
-   - For SpeechRecognition to work, you may need to install PyAudio
-   - Some systems require additional portaudio development libraries
+   System dependencies:
+   - Ubuntu/Debian: `sudo apt-get install portaudio19-dev`
+   - macOS: `brew install portaudio`
 
-## Running the Voice Assistant
+## Usage
 
-1. Save the code from the "MCP Voice Mode Server" artifact as `voice_server.py`
+### Starting the Server
 
-2. Run the server:
+```bash
+python voice_server.py
+```
+
+### Connecting to Claude
+
+1. Launch Claude from the terminal:
    ```bash
-   python voice_server.py
+   # On macOS
+   /Applications/Claude.app/Contents/MacOS/Claude
+   
+   # On Windows
+   # Use the path to your Claude executable
+   start "" "C:\Path\to\Claude.exe"
    ```
 
-3. Install the MCP server in Claude Desktop:
+2. Install the MCP server:
    ```bash
-   mcp install voice_server.py --name "Voice Assistant"
+   mcp install voice_server.py --name "Realtime Voice"
    ```
 
-4. Alternatively, test the server using the MCP Inspector:
+   Or test with the MCP Inspector:
    ```bash
    mcp dev voice_server.py
    ```
 
-## Using Voice Mode
+### Available Tools
 
-1. Once the server is running and connected to Claude, type "enter voice mode" in your conversation.
+- **list_audio_devices**: Shows all audio input/output devices
+- **listen_for_speech**: Records and transcribes speech
+- **speak_text**: Converts text to spoken audio
+- **voice_mode**: Starts interactive voice conversation
 
-2. Claude will activate the voice prompt, greeting you and explaining how to use voice mode.
+### Voice Conversation Mode
 
-3. The system will:
+To start:
+1. Connect the MCP server to Claude
+2. Ask Claude to "enter voice mode"
+3. Start talking - the system will:
    - Listen for your speech
-   - Transcribe it to text for Claude
-   - Convert Claude's response to speech
+   - Detect when you finish speaking
+   - Send transcribed text to Claude
+   - Speak Claude's response
 
-4. To exit voice mode, simply say "exit voice mode" during your conversation.
+To exit, just say "exit voice mode" or "stop voice mode".
 
-## Troubleshooting
+## Configuration
 
-- **Microphone access issues**: Ensure your application has permission to access your microphone.
-- **Speech recognition errors**: Check your internet connection, as Google's speech recognition service requires internet access.
-- **Audio output problems**: Verify your system's sound settings and ensure the default output device is selected.
+Edit these values in `voice_server.py` if needed:
 
-## Extending the Voice Assistant
-
-This is a basic prototype that you can extend in various ways:
-- Add different TTS engines for better quality speech
-- Implement speech recognition streaming for real-time transcription
-- Add voice customization options
-- Implement wake word detection
+- VAD_THRESHOLD: Voice detection sensitivity (default: 0.2)
+- SILENCE_DURATION: Seconds of silence before recording stops (default: 3)
+- Audio sample rate and format settings
