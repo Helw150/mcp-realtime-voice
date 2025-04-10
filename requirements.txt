@@ -1,0 +1,7 @@
+mcp
+sounddevice
+numpy
+SpeechRecognition
+gtts
+pyaudio
+onnxruntime>=1.16.1
