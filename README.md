@@ -51,12 +51,6 @@ Turn Claude into a voice assistant that listens and speaks. This MCP server hand
 
 ## Usage
 
-### Starting the Server
-
-```bash
-python voice_server.py
-```
-
 ### Connecting to Claude
 
 1. Launch Claude from the terminal:
